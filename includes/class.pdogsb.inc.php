@@ -725,7 +725,7 @@ class PdoGsb
         }*/
     }
      
-    public function majlibelle($idVisiteur,$mois,$libelle,$idFHF)
+    public function majlibelle($idVisiteur,$leMois,$leLibelle,$idFHF)
    {
  
       $requetePrepare = PdoGSB::$monPdo->prepare(      
@@ -733,15 +733,24 @@ class PdoGsb
               . 'SET lignefraishorsforfait.libelle = "REFUSE".:unLibelle '
               . 'WHERE lignefraishorsforfait.idvisiteur = :unIdVisiteur '
               . 'AND lignefraishorsforfait.mois = :unMois '
-              . 'AND lignefraishorsforfait.id = :unIdFrais'  
+              . 'AND lignefraishorsforfait.id = :unIdFHF'  
               );
       $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
-      $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
-      $requetePrepare->bindParam(':unLibelle', $libelle, PDO::PARAM_STR);  
-       $requetePrepare->bindParam(':unIdFrais', $idFrais, PDO::PARAM_INT);
+      $requetePrepare->bindParam(':unMois', $leMois, PDO::PARAM_STR);
+      $requetePrepare->bindParam(':unLibelle', $leLibelle, PDO::PARAM_STR);  
+      $requetePrepare->bindParam(':unIdFHF', $idFHF, PDO::PARAM_INT);
       $requetePrepare->execute();
      
   }
 
+  public function calculPrixKm($idVisiteur, $idVehicule) {
+       $requetePrepare = PdoGSB::$monPdo->prepare(
+               'SELECT idVehicule '
+               . 'FROM vehicule JOIN visiteur'
+               . 'ON visiteur.idVehicule = vehicule.idVehic'
+          );
+       $requetePrepare->execute();
+
+  }
 }
 
