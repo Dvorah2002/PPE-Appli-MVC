@@ -99,7 +99,7 @@
 </form>
 
 <?php//elements non forfaitises?>
-<form  role="form" method="post">
+<form  action="index.php?uc=validerFrais&action=corrigerFraisHF" role="form" method="post">
     <input type="hidden" id="lstVisiteurs" name="lstVisiteurs" class="form-control" value= "<?php echo $levisiteurASelectionner ?>">
     <input type="hidden" id="lstMois" name="lstMois" class="form-control" value= "<?php echo $moisASelectionner ?>">
      <h3>Eléments non forfaitisés</h3>
@@ -127,9 +127,11 @@
                     <td style="border-right:1px solid #ff6f02;"><input type="text" name="libelle" id="libelle" size="10" value="<?php echo $libelle ?>" class="form-control"/></td>
                     <td style="border-right:1px solid #ff6f02;"><input type="text" name="montant" id="montant" size="10" value="<?php echo $montant ?>" class="form-control"/></td>
                     
-                    <td><button class="btn btn-success" type="edit"action="index.php?uc=validerFrais&action=corrigerFraisHF">Corriger</button>
+                    <td><button class="btn btn-success" type="edit">Corriger</button>
                         <button class="btn btn-danger" type="reset">Reinitialiser</button>
-                        <button class="btn btn-danger" type="reset"action="index.php?uc=validerFrais&action=reporter"onclick="return confirm('Voulez-vous vraiment reporter ce frais?');">Reporter</button>
+                        <a  href = "index.php?uc=validerFrais&action=supprimerFrais&idFrais=<?php  echo  $idFHF  ?>&Mois=<?php  echo  $unFraisHorsForfait['mois'] ?>&IdVisiteur=<?php  echo  $levisiteurASelectionner ?>"
+                           type = "reset" class = "btn btn-danger" role ="bouton"
+                           onclick = "return confirm ('Voulez-vous vraiment supprimer ou reporter ce frais hors forfait?');"> Supprimer </a>
                     </td>
                 </tr>
                 <?php
@@ -154,7 +156,7 @@
               action="index.php?uc=validFrais&action=validerFiche" 
               role="form">
     <input name="lstMois" type="hidden" id="lstMois" class="form-control" value="<?php echo $moisASelectionner ?>">
-    <input name="lstVisiteurs" type="hidden" id="lstVisiteurs" class="form-control" value="<?php echo $visiteurASelectionner ?>">
+    <input name="lstVisiteurs" type="hidden" id="lstVisiteurs" class="form-control" value="<?php echo $levisiteurASelectionner ?>">
       Nombre de justificatifs: <input type="text" id="nbJust" name="nbJust" class="form-control-me" value="<?php echo $nbJustificatifs ?>"><br><br> 
     <input id="ok" type="submit" value="Valider" class="btn btn-success" 
             role="button">

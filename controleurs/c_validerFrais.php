@@ -86,9 +86,16 @@ case 'afficheFrais':
     $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
     $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois); 
     $nbJustificatifs= $pdo->getNbjustificatifs($idVisiteur, $leMois);
-    if (clic.'reporter'){
-        $pdo->majlibelle();
-    }
+    
+    if (isset($_POST['corriger'])){
+      $mois=getMoisSuivant($leMois);
+       if ($pdo->estPremierFraisMois($idVisiteur, $mois)){
+       $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
+       }
+       $pdo->majlibelle($idVisiteur,$leMois,$leLibelle,$idFHF);      
+       $pdo->creeNouveauFraisHorsForfait($idVisiteur,$mois,$leLibelle,$laDate,$leMontant);
+       
+   }
     include 'vues/v_afficheFrais.php';
     break;
     
@@ -143,20 +150,6 @@ case 'supprimer':
     <?php
     break;
 
-case 'reporter':
-    $idFHF = filter_input(INPUT_GET, 'idFrais', FILTER_SANITIZE_NUMBER_INT);
-    $date= filter_input(INPUT_GET,'date',FILTER_SANITIZE_STRING);
-    $libelle=filter_input(INPUT_GET,'libelle',FILTER_SANITIZE_STRING);
-    $montant=filter_input(INPUT_GET,'montant',FILTER_SANITIZE_INT);
-    $idVisiteur = filter_input(INPUT_POST, 'lstVisiteurs', FILTER_SANITIZE_STRING);
-    $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_STRING);
-    $leMoisSuivant = getMoisSuivant($mois);
-    
-    ?>
-<div class="alert alert-info" role="alert">
-        <p>Ce frais hors forfait a bien été reporté au mois suivant!</p>
-    </div>
-     <?php
     include 'vues/v_retourAccueil.php';
     break;
     
