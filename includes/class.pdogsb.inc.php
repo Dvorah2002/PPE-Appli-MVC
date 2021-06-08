@@ -117,6 +117,22 @@ class PdoGsb
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
+    
+     public function getInfosPatron($login, $mdp)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT patron.id AS id, patron.nom AS nom, '
+            . 'patron.prenom AS prenom '
+            . 'FROM patron '
+            . 'WHERE patron.login = :unLogin AND patron.mdp = :unMdp'
+        );
+// elle nous renvoi nom et prenom qui correspond au mdp et login
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
      * hors forfait concernées par les deux arguments.
@@ -630,6 +646,26 @@ class PdoGsb
         $laLigne = $requetePrepare->fetch();
         return $laLigne;
     }
+    
+    public function getLesInfosVisiteur($idVisiteur, $mois)
+    {
+        //chaine de caractére qui ns dis letat ou est le tablo 
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'SELECT visiteur.nom , '
+            . 'visiteur.prenom,'
+            . 'etat.id as idEtat, '
+            . 'FROM visiteur '
+            . 'JOIN fichefrais ON visiteur.id = fichefrais.id'
+            . 'WHERE fichefrais.mois = :unMois
+'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);        
+        $requetePrepare->execute();
+        $laLigne = $requetePrepare->fetch();
+        return $laLigne;
+    }
+    
 
     /**
      * Modifie l'état et la date de modification d'une fiche de frais.
@@ -750,7 +786,22 @@ class PdoGsb
                . 'ON visiteur.idVehicule = vehicule.idVehic'
           );
        $requetePrepare->execute();
+       return $requetePrepare->fetchAll();
 
+  }
+  
+  public function getpourcentage($leMois) {
+      $requetePrepare = PdoGSB::$monPdo->prepare(
+               "SELECT SUM(idetat) AND SUM(idvisiteur) "
+               . "FROM fichefrais"
+               . "AND SUM(idetat) / SUM(idvisiteur)*100"
+               . "WHERE idetat='VA'"
+               . "AND idetat AND mois=:unMois"
+          );
+       $requetePrepare->bindParam(':unMois', $leMois, PDO::PARAM_STR);
+       $requetePrepare->execute();
+       return $requetePrepare->fetchAll();
+      
   }
 }
 

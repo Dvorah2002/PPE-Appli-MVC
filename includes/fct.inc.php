@@ -268,6 +268,19 @@ function estComptableConnecte()
    }  
    
 }
+
+/**
+ * retourne le statut=patron  si il est connecté
+ * @return type
+ */
+function estPatronConnecte()
+{
+   if (estConnecte()){
+       return ($_SESSION['statut']== 'patron');
+   }  
+   
+}
+
 /**
  * recupere le mois suivant
  * @param type $mois
